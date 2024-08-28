@@ -71,6 +71,6 @@ helper.addGlobalEventListener("click", ".cancel-button", (event) => {
 });
 
 helper.addGlobalEventListener("click", ".delete-button", (event) => {
-  const parentNode = getNthParentNode(event.target, 2);
+  const parentNode = helper.getNthParentNode(event.target, 2);
   parentNode.remove();
 });
