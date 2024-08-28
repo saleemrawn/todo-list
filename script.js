@@ -32,7 +32,7 @@ helper.addGlobalEventListener("click", ".edit-button", (event) => {
   let currentButton = event.target;
   let savedItemText = helper.getPreviousSiblingsUntil(
     currentButton,
-    ".saved-item"
+    "saved-item"
   );
 
   currentButton.insertAdjacentHTML(
@@ -53,6 +53,10 @@ helper.addGlobalEventListener("click", ".edit-button", (event) => {
 helper.addGlobalEventListener("click", ".save-button", (event) => {
   let editContainer = event.target.parentNode;
   let editButton = event.target.parentNode.previousSibling;
+  let editInput = document.querySelector(".edit-input");
+  let savedItem = helper.getPreviousSiblingsUntil(editContainer, "saved-item");
+
+  savedItem[0].innerHTML = editInput.value;
 
   editButton.classList.remove("hidden");
   editContainer.remove();

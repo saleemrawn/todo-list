@@ -11,26 +11,34 @@ export function getNthParentNode(element, n) {
 }
 
 export function getPreviousSiblingsUntil(element, selector) {
+  const className = selector.startsWith(".") ? selector.subString(1) : selector;
+
   let siblings = [];
   let prev = element.previousElementSibling;
 
   while (prev) {
-    if (selector && prev.classList.contains(selector)) break;
-    siblings.push(prev);
-    prev = prev.previousElementSibling;
+    console.log(prev);
+    if (prev.classList.contains(className)) {
+      siblings.push(prev);
+      return siblings;
+    } else {
+      prev = prev.previousElementSibling;
+    }
   }
-  return siblings;
 }
 
 export function getNextSiblingsUntil(element, selector) {
-  const siblings = [];
-  const next = element.nextElementSibling;
+  const className = selector.startsWith(".") ? selector.subString(1) : selector;
+
+  let siblings = [];
+  let next = element.nextElementSibling;
 
   while (next) {
-    if (selector && next.matches(selector)) break;
-    siblings.push(next);
-
-    next = next.nextElementSibling;
+    if (next.classList.contains(className)) {
+      siblings.push(next);
+      return siblings;
+    } else {
+      next = next.nextElementSibling;
+    }
   }
-  return siblings;
 }
