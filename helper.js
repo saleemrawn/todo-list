@@ -17,7 +17,6 @@ export function getPreviousSiblingsUntil(element, selector) {
   let prev = element.previousElementSibling;
 
   while (prev) {
-    console.log(prev);
     if (prev.classList.contains(className)) {
       siblings.push(prev);
       return siblings;
