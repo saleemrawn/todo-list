@@ -1,0 +1,103 @@
+:root {
+  /** Colour Palette **/
+  --white: #ffffff;
+
+  --grey-50: #fafafa;
+  --grey-100: #f5f5f5;
+  --grey-200: #ededed;
+  --grey-300: #e0e0e0;
+  --grey-400: #bdbdbd;
+  --grey-500: #9e9e9e;
+  --grey-600: #757575;
+  --grey-700: #616161;
+  --grey-800: #424242;
+  --grey-900: #212121;
+
+  --red-50: #ffebee;
+  --red-100: #ffcdd2;
+  --red-200: #ef9a9a;
+  --red-300: #e57373;
+  --red-400: #ef5350;
+  --red-500: #f44336;
+  --red-600: #e53935;
+  --red-700: #d32f2f;
+  --red-800: #c62828;
+  --red-900: #b71c1c;
+  --red-A100: #ff8a80;
+  --red-A200: #ff5252;
+  --red-A400: #ff1744;
+  --red-A700: #d50000;
+
+  --light-green-50: #f1f8e9;
+  --light-green-100: #dcedc8;
+  --light-green-200: #c5e1a5;
+  --light-green-300: #aed581;
+  --light-green-400: #9ccc65;
+  --light-green-500: #8bc34a;
+  --light-green-600: #7cb342;
+  --light-green-700: #689f38;
+  --light-green-800: #558b2f;
+  --light-green-900: #33691e;
+  --light-green-A100: #ccff90;
+  --light-green-A200: #b2ff59;
+  --light-green-A400: #76ff03;
+  --light-green-A700: #64dd17;
+
+  --lime-50: #f9fbe7;
+  --lime-100: #f0f4c3;
+  --lime-200: #e6ee9c;
+  --lime-300: #dce775;
+  --lime-400: #d4e157;
+  --lime-500: #cddc39;
+  --lime-600: #c0ca33;
+  --lime-700: #afb42b;
+  --lime-800: #9e9d24;
+  --lime-900: #827717;
+  --lime-1000: #574f0f;
+
+  --purple-50: #ede7f6;
+  --purple-100: #d1c4e9;
+  --purple-200: #b39ddb;
+  --purple-300: #9575cd;
+  --purple-400: #7e57c2;
+  --purple-500: #673ab7;
+  --purple-600: #5e35b1;
+  --purple-700: #512da8;
+  --purple-800: #4527a0;
+  --purple-900: #311b92;
+
+  /** Surface Colours **/
+
+  /** Button Colours **/
+  --button-default-background-colour: var(--grey-200);
+  --button-default-background-colour-hover: var(--grey-500);
+  --button-default-border-colour: var(--grey-200);
+  --button-default-font-colour: var(--grey-900);
+
+  --button-primary-background-colour: var(--lime-400);
+  --button-primary-background-colour-hover: var(--lime-1000);
+  --button-primary-border-colour: var(--lime-300);
+  --button-primary-font-colour: var(--lime-1000);
+  --button-primary-font-colour-hover: var(--white);
+
+  --button-secondary-background-colour: var(--grey-300);
+  --button-secondary-background-colour-hover: var(--grey-600);
+  --button-secondary-border-colour: var(--grey-300);
+  --button-secondary-font-colour: var(--grey-900);
+
+  --button-success-background-colour: var(--light-green-500);
+  --button-success-background-colour-hover: var(--light-green-900);
+  --button-success-border-colour: var(--light-green-500);
+  --button-success-font-colour: var(--light-green-900);
+  --button-success-font-colour-hover: var(--white);
+
+  --button-danger-background-colour: var(--red-600);
+  --button-danger-background-colour-hover: var(--red-900);
+  --button-danger-border-colour: var(--red-A700);
+  --button-danger-font-colour: var(--white);
+
+  --button-link-background-colour: var(--grey-300);
+  --button-link-background-colour-hover: var(--grey-600);
+  --button-link-border-colour: var(--grey-300);
+  --button-link-font-colour: var(--grey-900);
+}

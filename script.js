@@ -16,10 +16,12 @@ helper.addGlobalEventListener("click", ".add-button", () => {
   } else {
     todoList.insertAdjacentHTML(
       "beforeend",
-      `<li data-id="${itemID}">
+      `<li class="todo-list-item" data-id="${itemID}">
+        <div class="list-item-container">
                   <p class="saved-item">${savedTodo}</p>
-                  <button class="edit-button">Edit</button>
-                  </li>`
+                  <button class="primary edit-button">Edit</button>
+                  </li>
+        </div>`
     );
 
     if (editContainer) {
@@ -34,27 +36,64 @@ helper.addGlobalEventListener("click", ".add-button", () => {
   }
 });
 
-helper.addGlobalEventListener("click", ".edit-button", (event) => {
+/* helper.addGlobalEventListener("click", ".edit-button", (event) => {
   const currentEditButton = event.target;
+  const listItemContainer = event.target.parentNode;
   const editButtons = document.querySelectorAll(".edit-button");
   const savedItemText = helper.getPreviousSiblingsUntil(
     currentEditButton,
     "saved-item"
   );
 
+  listItemContainer.insertAdjacentHTML(
+    "afterend",
+    `<div class="edit-container">
+            <input type="text" class="edit-input" />
+            <button class="success save-button">Save</button>
+            <button class="cancel-button">Cancel</button>
+            <button class="danger delete-button">Delete</button>
+        </div>`
+  );
+
+  listItemContainer.classList.add("hidden");
+
   currentEditButton.insertAdjacentHTML(
     "afterend",
     `<div class="edit-container">
             <input type="text" class="edit-input" />
-            <button class="save-button">Save</button>
+            <button class="success save-button">Save</button>
             <button class="cancel-button">Cancel</button>
-            <button class="delete-button">Delete</button>
+            <button class="danger delete-button">Delete</button>
         </div>`
   );
 
   editButtons.forEach((button) => {
     button.classList.add("hidden");
   });
+
+  const editInput = document.querySelector(".edit-input");
+  editInput.value = savedItemText[0].innerHTML;
+}); */
+
+helper.addGlobalEventListener("click", ".edit-button", (event) => {
+  const currentEditButton = event.target;
+  const listItemContainer = event.target.parentNode;
+  const savedItemText = helper.getPreviousSiblingsUntil(
+    currentEditButton,
+    "saved-item"
+  );
+
+  listItemContainer.insertAdjacentHTML(
+    "afterend",
+    `<div class="edit-container">
+            <input type="text" class="edit-input" />
+            <button class="success save-button">Save</button>
+            <button class="secondary cancel-button">Cancel</button>
+            <button class="danger delete-button">Delete</button>
+        </div>`
+  );
+
+  listItemContainer.classList.add("hidden");
 
   const editInput = document.querySelector(".edit-input");
   editInput.value = savedItemText[0].innerHTML;
@@ -65,12 +104,27 @@ helper.addGlobalEventListener("click", ".save-button", (event) => {
   const editButtons = document.querySelectorAll(".edit-button");
   const editButton = event.target.parentNode.previousSibling;
   const editInput = document.querySelector(".edit-input");
-  const savedItem = helper.getPreviousSiblingsUntil(
-    editContainer,
-    "saved-item"
-  );
 
-  savedItem[0].innerHTML = editInput.value;
+  /* const savedItem = helper.getPreviousSiblingsUntil(
+    editContainer,
+    ".saved-item"
+  ); */
+
+  const listItemContainer = editContainer.previousSibling.childNodes;
+  //console.log(savedItem);
+  let savedItem;
+
+  listItemContainer.forEach((element) => {
+    if (
+      element.nodeType === Node.ELEMENT_NODE &&
+      element.classList.contains("saved-item")
+    ) {
+      savedItem = element;
+    }
+  });
+
+  //console.log(savedItem);
+  savedItem.innerHTML = editInput.value;
 
   editButton.classList.remove("hidden");
   editContainer.remove();
@@ -80,7 +134,7 @@ helper.addGlobalEventListener("click", ".save-button", (event) => {
   });
 });
 
-helper.addGlobalEventListener("click", ".cancel-button", (event) => {
+/* helper.addGlobalEventListener("click", ".cancel-button", (event) => {
   const parentNode = event.target.parentNode;
   const editButton = parentNode.previousSibling;
   const editButtons = document.querySelectorAll(".edit-button");
@@ -91,6 +145,12 @@ helper.addGlobalEventListener("click", ".cancel-button", (event) => {
   editButtons.forEach((button) => {
     button.classList.remove("hidden");
   });
+}); */
+
+helper.addGlobalEventListener("click", ".cancel-button", (event) => {
+  const editContainer = event.target.parentNode;
+  editContainer.previousSibling.classList.remove("hidden");
+  editContainer.remove();
 });
 
 helper.addGlobalEventListener("click", ".delete-button", (event) => {

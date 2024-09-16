@@ -11,7 +11,7 @@ export function getNthParentNode(element, n) {
 }
 
 export function getPreviousSiblingsUntil(element, selector) {
-  const className = selector.startsWith(".") ? selector.subString(1) : selector;
+  const className = selector.startsWith(".") ? selector.substring(1) : selector;
 
   let siblings = [];
   let prev = element.previousElementSibling;

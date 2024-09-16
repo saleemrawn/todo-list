@@ -1,0 +1,6 @@
+:root {
+  /* Background Surfaces */
+
+  /* Shadows */
+  --box-shadow: drop-shadow();
+}

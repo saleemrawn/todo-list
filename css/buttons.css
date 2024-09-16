@@ -1,0 +1,75 @@
+button {
+  color: var(--button-default-font-colour);
+  background-color: var(--button-default-background-colour);
+  border-color: var(--button-default-border-colour);
+  border-width: 1px;
+  border-style: solid;
+  font-weight: 700;
+  padding: 0 24px;
+  border-radius: var(--border-radius-lg);
+  transition: 0.2s;
+  /* height: 100%; */
+  min-height: 48px;
+  white-space: nowrap;
+}
+
+button:hover {
+  background-color: var(--button-default-background-colour-hover);
+  cursor: pointer;
+}
+
+button:active {
+  background-color: var();
+}
+
+button:focus {
+  background-color: var();
+}
+
+button:disabled {
+  background-color: var();
+}
+
+button.primary {
+  background-color: var(--button-primary-background-colour);
+  border-color: transparent;
+}
+
+button.primary:hover {
+  background-color: var(--button-primary-background-colour-hover);
+  color: var(--button-primary-font-colour-hover);
+}
+
+button.danger {
+  background-color: var(--button-danger-background-colour);
+  color: var(--button-danger-font-colour);
+  border-color: transparent;
+}
+
+button.danger:hover {
+  background-color: var(--button-danger-background-colour-hover);
+}
+
+button.success {
+  background-color: var(--button-success-background-colour);
+  color: var(--button-success-font-colour);
+  border-color: transparent;
+}
+
+button.success:hover {
+  background-color: var(--button-success-background-colour-hover);
+  color: var(--button-success-font-colour-hover);
+}
+
+button.secondary {
+  background-color: var(--white);
+  color: var(--button-default-font-colour);
+  border-color: transparent;
+}
+
+button.secondary:hover {
+  background-color: var(--button-success-background-colour-hover);
+  color: var(--button-success-font-colour-hover);
+}
+
+/* .button-link  {} */

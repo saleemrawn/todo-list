@@ -1,0 +1,132 @@
+@import url(spacing.css);
+@import url(colours.css);
+@import url(fonts.css);
+@import url(buttons.css);
+
+:root {
+  --border-radius-sm: var();
+  --border-radius-md: var();
+  --border-radius-lg: 100rem;
+}
+
+body {
+  font-size: 16px;
+  font-family: var(--font-family);
+  max-width: 320px;
+  margin: 0 auto;
+  background-color: var(--grey-100);
+  color: var(--lime-1000);
+}
+
+main {
+  margin-top: 40px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: var(--heading-font-weight);
+}
+
+p {
+  font-weight: var(--paragraph-font-weight);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+input {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  border: none;
+  padding: 0 16px;
+  border-bottom: 2px solid var(--lime-900);
+}
+
+input:focus-visible {
+  outline-color: var(--lime-900);
+}
+
+.todo-list-item {
+  /* display: flex;
+  justify-content: space-between; */
+  margin-bottom: var(--spacing-lg);
+  /* border-radius: var(--border-radius-lg);
+  background-color: var(--white);
+  padding: 8px 8px 8px 24px; */
+}
+
+.list-item-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--white);
+  padding: 8px 8px 8px 24px;
+}
+
+.page-title {
+  text-align: center;
+}
+
+.todo-container {
+  display: flex;
+  height: 48px;
+}
+
+.todo-item {
+  margin-right: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+.todo-list li {
+  position: relative;
+  margin: 8px 0;
+}
+
+.edit-container {
+  display: flex;
+  justify-content: center;
+  height: 48px;
+  width: 100%;
+}
+
+.edit-input,
+.save-button,
+.cancel-button {
+  margin-right: 8px;
+}
+
+/* X-Small devices (portrait phones, less than 576px) */
+/* No media query for `xs` since this is the default in Bootstrap */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+  body {
+    max-width: 720px;
+  }
+}
