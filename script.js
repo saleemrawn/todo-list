@@ -2,8 +2,10 @@ import * as helper from "./helper.js";
 
 const todoInput = document.querySelector(".todo-item");
 const todoList = document.querySelector(".todo-list");
+const itemCounter = document.querySelector(".item-counter span");
 
 let itemID = 0;
+let itemCount = 0;
 
 todoInput.value = "";
 
@@ -32,6 +34,10 @@ helper.addGlobalEventListener("click", ".add-button", () => {
     }
 
     itemID++;
+
+    itemCount++;
+    itemCounter.innerHTML = itemCount;
+
     todoInput.value = "";
   }
 });
@@ -162,4 +168,7 @@ helper.addGlobalEventListener("click", ".delete-button", (event) => {
   editButtons.forEach((button) => {
     button.classList.remove("hidden");
   });
+
+  itemCount--;
+  itemCounter.innerHTML = itemCount;
 });

@@ -52,6 +52,12 @@ input:focus-visible {
   outline-color: var(--lime-900);
 }
 
+hr {
+  border-style: solid;
+  border-color: var(--grey-300);
+  border-width: 1px;
+}
+
 .todo-list-item {
   /* display: flex;
   justify-content: space-between; */
@@ -103,6 +109,22 @@ input:focus-visible {
 .save-button,
 .cancel-button {
   margin-right: 8px;
+}
+
+.item-counter {
+  margin-top: var(--spacing-40);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--lime-1000);
+  width: fit-content;
+  padding: 2px 16px;
+}
+
+.item-counter p {
+  color: var(--white);
+}
+
+.item-counter span {
+  font-weight: 700;
 }
 
 /* X-Small devices (portrait phones, less than 576px) */
