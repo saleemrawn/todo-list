@@ -111,7 +111,7 @@ hr {
   margin-right: 8px;
 }
 
-.tasks-counter {
+/* .tasks-counter {
   margin-top: var(--spacing-40);
   border-radius: var(--border-radius-lg);
   background-color: var(--lime-1000);
@@ -125,6 +125,30 @@ hr {
 
 .tasks-counter span {
   font-weight: 700;
+} */
+.counter-container {
+  display: flex;
+  margin-top: var(--spacing-24);
+}
+
+.tasks-counter {
+  width: fit-content;
+  display: flex;
+  margin-right: var(--spacing-24);
+}
+
+.total-tasks,
+.completed-tasks {
+  font-weight: 700;
+  color: var(--white);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--lime-1000);
+  height: 32px;
+  width: 32px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: var(--spacing-4);
 }
 
 /* X-Small devices (portrait phones, less than 576px) */
