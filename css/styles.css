@@ -111,7 +111,7 @@ hr {
   margin-right: 8px;
 }
 
-.item-counter {
+.tasks-counter {
   margin-top: var(--spacing-40);
   border-radius: var(--border-radius-lg);
   background-color: var(--lime-1000);
@@ -119,11 +119,11 @@ hr {
   padding: 2px 16px;
 }
 
-.item-counter p {
+.tasks-counter p {
   color: var(--white);
 }
 
-.item-counter span {
+.tasks-counter span {
   font-weight: 700;
 }
 

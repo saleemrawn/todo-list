@@ -2,7 +2,7 @@ import * as helper from "./helper.js";
 
 const todoInput = document.querySelector(".todo-item");
 const todoList = document.querySelector(".todo-list");
-const itemCounter = document.querySelector(".item-counter span");
+const itemCounter = document.querySelector(".tasks-counter span");
 
 let itemID = 0;
 let itemCount = 0;
