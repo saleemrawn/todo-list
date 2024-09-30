@@ -2,10 +2,11 @@ import * as helper from "./helper.js";
 
 const todoInput = document.querySelector(".todo-item");
 const todoList = document.querySelector(".todo-list");
-const itemCounter = document.querySelector(".tasks-counter span");
+const itemCounter = document.querySelector(".total-tasks p");
 
 let itemID = 0;
-let itemCount = 0;
+let totalTasks = 0;
+let totalCompleted = 0;
 
 todoInput.value = "";
 
@@ -20,7 +21,10 @@ helper.addGlobalEventListener("click", ".add-button", () => {
       "beforeend",
       `<li class="todo-list-item" data-id="${itemID}">
         <div class="list-item-container">
-                  <p class="saved-item">${savedTodo}</p>
+                  <div class="item-content">
+                    <input type="checkbox" class="checkbox-completed" name="completed"/>
+                    <p class="saved-item">${savedTodo}</p>
+                  </div>
                   <button class="primary edit-button">Edit</button>
                   </li>
         </div>`
@@ -35,58 +39,30 @@ helper.addGlobalEventListener("click", ".add-button", () => {
 
     itemID++;
 
-    itemCount++;
-    itemCounter.innerHTML = itemCount;
+    totalTasks++;
+    itemCounter.innerHTML = totalTasks;
 
     todoInput.value = "";
   }
 });
 
-/* helper.addGlobalEventListener("click", ".edit-button", (event) => {
-  const currentEditButton = event.target;
-  const listItemContainer = event.target.parentNode;
-  const editButtons = document.querySelectorAll(".edit-button");
-  const savedItemText = helper.getPreviousSiblingsUntil(
-    currentEditButton,
-    "saved-item"
-  );
-
-  listItemContainer.insertAdjacentHTML(
-    "afterend",
-    `<div class="edit-container">
-            <input type="text" class="edit-input" />
-            <button class="success save-button">Save</button>
-            <button class="cancel-button">Cancel</button>
-            <button class="danger delete-button">Delete</button>
-        </div>`
-  );
-
-  listItemContainer.classList.add("hidden");
-
-  currentEditButton.insertAdjacentHTML(
-    "afterend",
-    `<div class="edit-container">
-            <input type="text" class="edit-input" />
-            <button class="success save-button">Save</button>
-            <button class="cancel-button">Cancel</button>
-            <button class="danger delete-button">Delete</button>
-        </div>`
-  );
-
-  editButtons.forEach((button) => {
-    button.classList.add("hidden");
-  });
-
-  const editInput = document.querySelector(".edit-input");
-  editInput.value = savedItemText[0].innerHTML;
-}); */
-
 helper.addGlobalEventListener("click", ".edit-button", (event) => {
   const currentEditButton = event.target;
   const listItemContainer = event.target.parentNode;
+  const editButtons = document.querySelectorAll(".edit-button");
+  const addButton = document.querySelector(".add-button");
+
+  editButtons.forEach((button) => {
+    button.classList.add("disabled");
+    button.setAttribute("disabled", "");
+  });
+
+  addButton.classList.add("disabled");
+  addButton.setAttribute("disabled", "");
+
   const savedItemText = helper.getPreviousSiblingsUntil(
     currentEditButton,
-    "saved-item"
+    "item-content"
   );
 
   listItemContainer.insertAdjacentHTML(
@@ -102,73 +78,109 @@ helper.addGlobalEventListener("click", ".edit-button", (event) => {
   listItemContainer.classList.add("hidden");
 
   const editInput = document.querySelector(".edit-input");
-  editInput.value = savedItemText[0].innerHTML;
+  editInput.value = savedItemText[0].querySelector(".saved-item").innerHTML;
 });
 
 helper.addGlobalEventListener("click", ".save-button", (event) => {
   const editContainer = event.target.parentNode;
-  const editButtons = document.querySelectorAll(".edit-button");
   const editButton = event.target.parentNode.previousSibling;
   const editInput = document.querySelector(".edit-input");
 
-  /* const savedItem = helper.getPreviousSiblingsUntil(
-    editContainer,
-    ".saved-item"
-  ); */
-
-  const listItemContainer = editContainer.previousSibling.childNodes;
-  //console.log(savedItem);
   let savedItem;
 
+  const listItemContainer = editContainer.previousSibling.childNodes;
   listItemContainer.forEach((element) => {
     if (
       element.nodeType === Node.ELEMENT_NODE &&
-      element.classList.contains("saved-item")
+      element.classList.contains("item-content")
     ) {
-      savedItem = element;
+      let itemContent = element;
+      savedItem = itemContent.querySelector(".saved-item");
     }
   });
 
-  //console.log(savedItem);
   savedItem.innerHTML = editInput.value;
+  editContainer.querySelector(".edit-input").innerHTML = editInput.value;
 
+  const editButtons = document.querySelectorAll(".edit-button");
   editButton.classList.remove("hidden");
   editContainer.remove();
 
+  const addButton = document.querySelector(".add-button");
+  addButton.classList.remove("disabled");
+  addButton.removeAttribute("disabled", "");
+
   editButtons.forEach((button) => {
-    button.classList.remove("hidden");
+    button.classList.remove("disabled");
+    button.removeAttribute("disabled");
   });
 });
 
-/* helper.addGlobalEventListener("click", ".cancel-button", (event) => {
-  const parentNode = event.target.parentNode;
-  const editButton = parentNode.previousSibling;
-  const editButtons = document.querySelectorAll(".edit-button");
-
-  editButton.classList.remove("hidden");
-  parentNode.remove();
-
-  editButtons.forEach((button) => {
-    button.classList.remove("hidden");
-  });
-}); */
-
 helper.addGlobalEventListener("click", ".cancel-button", (event) => {
   const editContainer = event.target.parentNode;
+  const editButtons = document.querySelectorAll(".edit-button");
+
+  editButtons.forEach((button) => {
+    button.classList.remove("disabled");
+    button.removeAttribute("disabled");
+  });
+
+  const addButton = document.querySelector(".add-button");
+  addButton.classList.remove("disabled");
+  addButton.removeAttribute("disabled", "");
+
   editContainer.previousSibling.classList.remove("hidden");
   editContainer.remove();
 });
 
 helper.addGlobalEventListener("click", ".delete-button", (event) => {
   const parentNode = helper.getNthParentNode(event.target, 2);
+  const parentListContainer = helper.getNthParentNode(event.target, 4);
   const editButtons = document.querySelectorAll(".edit-button");
-
-  parentNode.remove();
+  const completedCount = document.querySelector(".completed-tasks p");
 
   editButtons.forEach((button) => {
-    button.classList.remove("hidden");
+    button.classList.remove("disabled");
+    button.removeAttribute("disabled");
   });
 
-  itemCount--;
-  itemCounter.innerHTML = itemCount;
+  const addButton = document.querySelector(".add-button");
+  addButton.classList.remove("disabled");
+  addButton.removeAttribute("disabled", "");
+
+  itemCounter.innerHTML = totalTasks;
+  if (parentListContainer.classList.contains("inprogress-container")) {
+    totalTasks--;
+    itemCounter.innerHTML = totalTasks;
+  } else {
+    totalCompleted--;
+    completedCount.innerHTML = totalCompleted;
+  }
+
+  parentNode.remove();
+});
+
+helper.addGlobalEventListener("click", ".checkbox-completed", (event) => {
+  const completedCount = document.querySelector(".completed-tasks p");
+  const taskCompleted = helper.getNthParentNode(event.target, 3);
+  const todoTaskList = document.querySelector(".todo-list");
+  const completedTaskList = document.querySelector(".completed-list");
+
+  if (event.target.hasAttribute("checked")) {
+    event.target.removeAttribute("checked");
+    totalCompleted--;
+    completedCount.innerHTML = totalCompleted;
+
+    totalTasks++;
+    itemCounter.innerHTML = totalTasks;
+    completedCount.innerHTML = totalCompleted;
+    todoTaskList.appendChild(taskCompleted);
+  } else {
+    event.target.setAttribute("checked", "");
+    totalCompleted++;
+    totalTasks--;
+    itemCounter.innerHTML = totalTasks;
+    completedCount.innerHTML = totalCompleted;
+    completedTaskList.appendChild(taskCompleted);
+  }
 });

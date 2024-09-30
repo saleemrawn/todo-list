@@ -34,6 +34,16 @@ p {
   font-weight: var(--paragraph-font-weight);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  margin: 0;
+  padding: 0;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -50,6 +60,57 @@ input {
 
 input:focus-visible {
   outline-color: var(--lime-900);
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  border: none;
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  position: relative;
+}
+
+input[type="checkbox"]::before,
+input[type="checkbox"]::after {
+  font-family: "Font Awesome 6 Free";
+  font-size: 24px;
+  font-weight: 700;
+  transition: opacity 0.2s ease;
+}
+
+input[type="checkbox"]::before {
+  content: "\f058";
+  color: var(--lime-400);
+  opacity: 0.5;
+  z-index: 99;
+  position: relative;
+}
+
+input[type="checkbox"]::after {
+  content: "\f111";
+  color: var(--lime-1000);
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+input[type="checkbox"]:hover::before,
+input[type="checkbox"]:hover::after,
+input[type="checkbox"]:checked::before,
+input[type="checkbox"]:checked::after {
+  opacity: 1;
+}
+
+input[type="checkbox"]:hover::before,
+input[type="checkbox"]:hover::after {
+  cursor: pointer;
+}
+
+.checkbox-completed {
+  margin-right: var(--spacing-12);
 }
 
 hr {
@@ -71,13 +132,20 @@ hr {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  box-sizing: border-box;
   border-radius: var(--border-radius-lg);
   background-color: var(--white);
   padding: 8px 8px 8px 24px;
 }
 
+.item-content {
+  display: flex;
+  align-items: center;
+}
+
 .page-title {
   text-align: center;
+  margin-bottom: var(--spacing-24);
 }
 
 .todo-container {
@@ -93,7 +161,12 @@ hr {
   display: none;
 }
 
-.todo-list li {
+.disabled {
+  opacity: 0.4;
+}
+
+.todo-list li,
+.completed-list li {
   position: relative;
   margin: 8px 0;
 }
@@ -126,29 +199,39 @@ hr {
 .tasks-counter span {
   font-weight: 700;
 } */
+
 .counter-container {
   display: flex;
   margin-top: var(--spacing-24);
 }
 
+.inprogress-container,
+.completed-container {
+  margin-top: var(--spacing-40);
+}
+
 .tasks-counter {
-  width: fit-content;
+  width: 100%;
   display: flex;
-  margin-right: var(--spacing-24);
+  align-items: center;
 }
 
 .total-tasks,
 .completed-tasks {
-  font-weight: 700;
-  color: var(--white);
   border-radius: var(--border-radius-lg);
   background-color: var(--lime-1000);
-  height: 32px;
-  width: 32px;
+  height: 40px;
+  width: 40px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-right: var(--spacing-4);
+  margin-right: var(--spacing-8);
+}
+
+.total-tasks p,
+.completed-tasks p {
+  font-weight: 700;
+  color: var(--white);
 }
 
 /* X-Small devices (portrait phones, less than 576px) */

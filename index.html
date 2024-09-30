@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.0/modern-normalize.min.css"
       integrity="sha512-3axTZ/bKFZH5/qLFTl4U+mDbBDFW+5QO5L7D1HnOhlhJbcNDIVJxoNm6It77g0eUdzfKZlHirayqRC2qJaAOJw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
-    />
+    /> -->
+    <link rel="stylesheet" href="css/normalize.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- <link
@@ -20,6 +21,10 @@
       href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/5a35841989.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="./css/styles.css" />
     <title>To-Do List</title>
   </head>
@@ -27,18 +32,45 @@
     <main>
       <h1 class="page-title">What's on your agenda?</h1>
       <div class="todo-container">
-        <input class="todo-item" type="text" placeholder="Add task" />
+        <input
+          class="todo-item"
+          type="text"
+          placeholder="Add task"
+          name="todo-item"
+        />
         <button class="primary add-button">+ Add</button>
       </div>
-      <div class="counter-container">
+
+      <!-- <div class="counter-container">
         <div class="tasks-counter">
           <p><span class="total-tasks">0</span> Total</p>
         </div>
         <div class="tasks-counter">
           <p><span class="completed-tasks">0</span> Completed</p>
         </div>
+      </div> -->
+
+      <div class="inprogress-container">
+        <div class="tasks-counter">
+          <div class="total-tasks">
+            <p>0</p>
+          </div>
+          <h3>In-Progress</h3>
+        </div>
+        <ul class="todo-list"></ul>
+        <hr />
       </div>
-      <ul class="todo-list"></ul>
+
+      <div class="completed-container">
+        <div class="tasks-counter">
+          <div class="completed-tasks">
+            <p>0</p>
+          </div>
+          <h3>Completed</h3>
+        </div>
+        <ul class="completed-list"></ul>
+        <hr />
+      </div>
     </main>
     <script src="script.js" type="module"></script>
   </body>

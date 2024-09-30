@@ -30,6 +30,12 @@ button:disabled {
   background-color: var();
 }
 
+button.primary:hover:disabled {
+  background-color: var(--button-primary-background-colour);
+  color: var(--button-default-font-colour);
+  border-color: transparent;
+}
+
 button.primary {
   background-color: var(--button-primary-background-colour);
   border-color: transparent;
