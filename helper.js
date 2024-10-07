@@ -1,11 +1,3 @@
-export function addGlobalEventListener(type, selector, callback) {
-  document.addEventListener(type, (event) => {
-    if (event.target.matches(selector)) {
-      callback(event);
-    }
-  });
-}
-
 export function getNthParentNode(element, n) {
   return n === 0 ? element : getNthParentNode(element.parentNode, n - 1);
 }
@@ -20,9 +12,8 @@ export function getPreviousSiblingsUntil(element, selector) {
     if (prev.classList.contains(className)) {
       siblings.push(prev);
       return siblings;
-    } else {
-      prev = prev.previousElementSibling;
     }
+    prev = prev.previousElementSibling;
   }
 }
 
@@ -36,8 +27,7 @@ export function getNextSiblingsUntil(element, selector) {
     if (next.classList.contains(className)) {
       siblings.push(next);
       return siblings;
-    } else {
-      next = next.nextElementSibling;
     }
+    next = next.nextElementSibling;
   }
 }
