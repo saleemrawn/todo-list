@@ -1,27 +1,86 @@
 import * as helper from "./helper.js";
-import { updateCounter } from "./counters.js";
+import {
+  saveLocalStorage,
+  getLocalStorage,
+  deleteLocalStorage,
+  loadLocalStorage,
+} from "./localstorage.js";
+import { loadCounters } from "./counters.js";
 
-export function addTask(input, list) {
+const tasks = [];
+
+const tasksCounter = document.querySelector(".total-tasks p");
+const completedCounter = document.querySelector(".completed-tasks p");
+
+let totalTasks = 0;
+let totalCompleted = 0;
+let isProcessing = false;
+
+export function loadTasks() {
+  const todoList = document.querySelector(".todo-list");
+  const completedList = document.querySelector(".completed-list");
+
+  let sortedTasks = helper.sortList("nosort", tasks);
+
+  loadLocalStorage(tasks);
+
+  sortedTasks.forEach((item) => {
+    const keySubstring = item[0].substring(0, 4);
+    if (keySubstring === "todo") {
+      todoList.insertAdjacentHTML(
+        "beforeend",
+        `<li class="todo-list-item" data-id=${item[0]}>
+        <div class="list-item-container">
+                  <div class="item-content">
+                    <input type="checkbox" class="checkbox-completed" name="completed"/>
+                    <p class="saved-item">${item[1]}</p>
+                  </div>
+                  <button class="primary edit-button">Edit</button>
+                  </li>
+        </div>`
+      );
+      totalTasks++;
+      return;
+    }
+
+    if (keySubstring === "done") {
+      completedList.insertAdjacentHTML(
+        "beforeend",
+        `<li class="todo-list-item" data-id=${item[0]}>
+        <div class="list-item-container">
+                  <div class="item-content">
+                    <input type="checkbox" class="checkbox-completed" name="completed" checked/>
+                    <p class="saved-item">${item[1]}</p>
+                  </div>
+                  <button class="primary edit-button">Edit</button>
+                  </li>
+        </div>`
+      );
+    }
+    totalCompleted++;
+    return;
+  });
+
+  loadCounters(totalTasks, totalCompleted);
+}
+
+export function addTask(input) {
+  if (isProcessing) return;
+  isProcessing = true;
+
   const editContainer = document.querySelector(".edit-container");
   let taskName = input.value;
+  let taskDateTime = helper.getDateTime();
 
   if (taskName === "") {
     alert("Please enter a todo list name.");
     return;
   }
 
-  list.insertAdjacentHTML(
-    "beforeend",
-    `<li class="todo-list-item">
-        <div class="list-item-container">
-                  <div class="item-content">
-                    <input type="checkbox" class="checkbox-completed" name="completed"/>
-                    <p class="saved-item">${taskName}</p>
-                  </div>
-                  <button class="primary edit-button">Edit</button>
-                  </li>
-        </div>`
-  );
+  tasks.push([`todo_${taskDateTime}`, taskName]);
+  saveLocalStorage(`todo_${taskDateTime}`, taskName);
+
+  addToDOM(taskDateTime, taskName);
 
   if (editContainer) {
     const editButtons = document.querySelectorAll(".edit-button");
@@ -30,13 +89,17 @@ export function addTask(input, list) {
     });
   }
 
-  updateCounter("task", "increment");
+  totalTasks++;
+  updateDOMCounters();
+
   input.value = "";
+
+  isProcessing = false;
 }
 
 export function editTask(event) {
   const currentEditButton = event.target;
-  const listItemContainer = event.target.parentNode;
+  const listContainer = event.target.parentNode;
   const editButtons = document.querySelectorAll(".edit-button");
   const addButton = document.querySelector(".add-button");
   const savedTask = helper.getPreviousSiblingsUntil(
@@ -46,7 +109,7 @@ export function editTask(event) {
 
   disableButton([addButton, editButtons]);
 
-  listItemContainer.insertAdjacentHTML(
+  listContainer.insertAdjacentHTML(
     "afterend",
     `<div class="edit-container">
             <input type="text" class="edit-input" />
@@ -56,10 +119,11 @@ export function editTask(event) {
         </div>`
   );
 
-  listItemContainer.classList.add("hidden");
+  listContainer.classList.add("hidden");
 
+  const editInput = document.querySelector(".edit-input");
   const taskText = savedTask[0].querySelector(".saved-item").innerHTML;
-  setEditInputValue(taskText);
+  editInput.value = taskText;
 }
 
 export function saveTask(event) {
@@ -88,56 +152,123 @@ export function cancelEdit(event) {
 }
 
 export function deleteTask(event) {
-  const parentNode = helper.getNthParentNode(event.target, 2);
-  const parentListContainer = helper.getNthParentNode(event.target, 4);
+  const parentContainer = helper.getNthParentNode(event.target, 4);
+  const listContainer = helper.getNthParentNode(event.target, 2);
   const editButtons = document.querySelectorAll(".edit-button");
   const addButton = document.querySelector(".add-button");
 
-  const updateCounters = (container) => {
-    const counterType = container.classList.contains("inprogress-container")
-      ? "task"
-      : "completed";
-    updateCounter(counterType, "decrement");
-  };
+  if (parentContainer.classList.contains("inprogress-container")) totalTasks--;
+  if (parentContainer.classList.contains("completed-container"))
+    totalCompleted--;
 
-  updateCounters(parentListContainer);
+  updateDOMCounters();
+
+  deleteLocalStorage(listContainer.getAttribute("data-id"));
   enableButton([addButton, editButtons]);
-  parentNode.remove();
-}
 
-export function addGlobalEventListener(type, selector, callback) {
-  document.addEventListener(type, (event) => {
-    if (event.target.matches(selector)) {
-      callback(event);
-    }
-  });
+  listContainer.remove();
 }
 
 export function updateTaskStatus(event) {
-  const taskCompleted = helper.getNthParentNode(event.target, 3);
-  const todoTaskList = document.querySelector(".todo-list");
-  const completedTaskList = document.querySelector(".completed-list");
-  const isCompleted = event.target.hasAttribute("checked");
+  if (isProcessing) return;
+  isProcessing = true;
 
-  const updateCounters = (taskAction, completedAction) => {
-    updateCounter("task", taskAction);
-    updateCounter("completed", completedAction);
-  };
+  const isChecked = event.target.hasAttribute("checked");
 
-  if (isCompleted) {
-    event.target.removeAttribute("checked");
-    todoTaskList.appendChild(taskCompleted);
-    updateCounters("increment", "decrement");
+  if (isChecked) {
+    updateToDraft(event);
+    totalTasks++;
+    totalCompleted--;
+    updateDOMCounters();
+    isProcessing = false;
     return;
   }
-  event.target.setAttribute("checked", "");
-  completedTaskList.appendChild(taskCompleted);
-  updateCounters("decrement", "increment");
+
+  updateToCompleted(event);
+  totalTasks--;
+  totalCompleted++;
+  updateDOMCounters();
+
+  isProcessing = false;
+  return;
 }
 
-function setEditInputValue(task) {
-  const editInput = document.querySelector(".edit-input");
-  editInput.value = task;
+function updateDOMCounters() {
+  tasksCounter.innerHTML = totalTasks;
+  completedCounter.innerHTML = totalCompleted;
+}
+
+function addToDOM(id, name) {
+  const todoList = document.querySelector(".todo-list");
+
+  todoList.insertAdjacentHTML(
+    "beforeend",
+    `<li class="todo-list-item" data-id="todo_${id}">
+        <div class="list-item-container">
+                  <div class="item-content">
+                    <input type="checkbox" class="checkbox-completed" name="completed"/>
+                    <p class="saved-item">${name}</p>
+                  </div>
+                  <button class="primary edit-button">Edit</button>
+                  </li>
+        </div>`
+  );
+}
+
+function updateToCompleted(event) {
+  const taskContainer = helper.getNthParentNode(event.target, 3);
+  const completedTasks = document.querySelector(".completed-list");
+  const taskID = taskContainer.getAttribute("data-id");
+  const storedValue = getLocalStorage(taskID);
+
+  if (!storedValue) {
+    console.error("No stored value found for task ID:", taskID);
+    return;
+  }
+
+  tasks.push([`done_${taskID.substring(5)}`, storedValue]);
+
+  taskContainer.setAttribute("data-id", `done_${taskID.substring(5)}`);
+
+  const taskIndex = tasks.findIndex((task) => task[0] === taskID);
+
+  if (taskIndex > -1) {
+    tasks.splice(taskIndex, 1);
+  }
+
+  localStorage.removeItem(taskID);
+  saveLocalStorage(`done_${taskID.substring(5)}`, storedValue);
+
+  event.target.setAttribute("checked", "");
+  completedTasks.appendChild(taskContainer);
+}
+
+function updateToDraft(event) {
+  const taskContainer = helper.getNthParentNode(event.target, 3);
+  const taskID = taskContainer.getAttribute("data-id");
+  const todoTasks = document.querySelector(".todo-list");
+  const storedValue = getLocalStorage(taskID);
+
+  if (!storedValue) {
+    console.error("No stored value found for task ID:", taskID);
+    return;
+  }
+
+  tasks.push([`todo_${taskID.substring(5)}`, storedValue]);
+
+  taskContainer.setAttribute("data-id", `todo_${taskID.substring(5)}`);
+
+  const taskIndex = tasks.findIndex((task) => task[0] === taskID);
+
+  if (taskIndex > -1) {
+    tasks.splice(taskIndex, 1);
+  }
+
+  localStorage.removeItem(taskID);
+  saveLocalStorage(`todo_${taskID.substring(5)}`, storedValue);
+
+  event.target.removeAttribute("checked", "");
+  todoTasks.appendChild(taskContainer);
 }
 
 function enableButton(buttons) {
@@ -184,11 +315,40 @@ function getSavedTask(container) {
 }
 
 function updateSavedTask(event, container) {
+  const parentContainer = helper.getNthParentNode(event.target, 2);
   const editContainer = event.target.parentNode;
   const editInput = document.querySelector(".edit-input");
+  const taskID = parentContainer.getAttribute("data-id");
 
   let savedTask = getSavedTask(container);
 
+  if (
+    !tasks ||
+    tasks.length === 0 ||
+    !taskID ||
+    !editInput ||
+    !editInput.value
+  ) {
+    return;
+  }
+
+  saveLocalStorage(taskID, editInput.value);
+
+  tasks.forEach((item) => {
+    if (item[0] === taskID) {
+      item[1] = editInput.value;
+      return;
+    }
+  });
+
   savedTask.innerHTML = editInput.value;
   editContainer.querySelector(".edit-input").innerHTML = editInput.value;
+}
+
+export function addGlobalEventListener(type, selector, callback) {
+  document.addEventListener(type, (event) => {
+    if (event.target.matches(selector)) {
+      callback(event);
+    }
+  });
 }

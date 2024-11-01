@@ -6,31 +6,33 @@ const COMPLETED_TASK = "completed";
 const tasksCounter = document.querySelector(".total-tasks p");
 const completedCounter = document.querySelector(".completed-tasks p");
 
-let totalTasks = 0;
-let totalCompleted = 0;
-
 export function updateCounter(type, operator) {
   isValidTask(type);
   isValidOperator(operator);
 
   if (type === TOTAL_TASK) {
     totalTasks = updateValue(totalTasks, operator);
-    updateCounterDisplay(tasksCounter, totalTasks);
+    updateCount(tasksCounter, totalTasks);
     return;
   }
 
   if (type === COMPLETED_TASK) {
     totalCompleted = updateValue(totalCompleted, operator);
-    updateCounterDisplay(completedCounter, totalCompleted);
+    updateCount(completedCounter, totalCompleted);
     return;
   }
+}
+
+export function loadCounters(todo, completed) {
+  updateCount(tasksCounter, todo);
+  updateCount(completedCounter, completed);
 }
 
 function updateValue(counter, operator) {
   return operator === INCREMENT ? counter + 1 : counter - 1;
 }
 
-function updateCounterDisplay(display, counter) {
+function updateCount(display, counter) {
   display.innerHTML = counter;
 }
 

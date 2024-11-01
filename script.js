@@ -1,4 +1,4 @@
-import { addGlobalEventListener } from "./event-listeners.js";
+import { addGlobalEventListener, loadTasks } from "./event-listeners.js";
 import {
   addTask,
   editTask,
@@ -10,10 +10,11 @@ import {
 
 (function () {
   const todoInput = document.querySelector(".todo-item");
-  const todoList = document.querySelector(".todo-list");
+
+  loadTasks();
 
   addGlobalEventListener("click", ".add-button", () => {
-    addTask(todoInput, todoList);
+    addTask(todoInput);
   });
 
   addGlobalEventListener("click", ".edit-button", (event) => {
